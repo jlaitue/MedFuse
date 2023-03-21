@@ -34,8 +34,10 @@ seed = 1002
 torch.manual_seed(seed)
 np.random.seed(seed)
 
+shamout_dir = '/scratch/fs999/shamoutlab'
+
 def read_timeseries(args):
-    path = f'{args.ehr_data_dir}/{args.task}/train/14991576_episode3_timeseries.csv'
+    path = f'{shamout_dir}/{args.ehr_data_dir}/{args.task}/train/14991576_episode3_timeseries.csv'
     ret = []
     with open(path, "r") as tsfile:
         header = tsfile.readline().strip().split(',')

@@ -17,8 +17,6 @@ print('done', len(paths_done))
 paths_all = glob.glob(f'{data_dir}/{version}/files/**/*.jpg', recursive = True)
 print('all', len(paths_all))
 
-
-
 done_files = [os.path.basename(path) for path in paths_done]
 
 paths = [path for path in paths_all if os.path.basename(path) not in done_files ]
