@@ -7,8 +7,8 @@ import glob
 from tqdm import tqdm
 import os
 
-print('starting')
-data_dir = 'physionet.org/files/mimic-cxr-jpg'
+print('Starting')
+data_dir = '/scratch/fs999/shamoutlab/data/physionet.org/files/mimic-cxr-jpg'
 version = '2.0.0'
 
 paths_done = glob.glob(f'{data_dir}/{version}/resized/**/*.jpg', recursive = True)
