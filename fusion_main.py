@@ -4,7 +4,7 @@ from __future__ import print_function
 import numpy as np
 import argparse
 import os
-import imp
+import importlib
 import re
 from trainers.fusion_trainer import FusionTrainer
 from trainers.mmtm_trainer import MMTMTrainer
