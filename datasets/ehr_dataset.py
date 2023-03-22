@@ -9,6 +9,8 @@ import glob
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 
+shamout_dir = '/scratch/fs999/shamoutlab'
+
 class EHRdataset(Dataset):
     def __init__(self, discretizer, normalizer, listfile, dataset_dir, return_names=True, period_length=48.0):
         self.return_names = return_names
@@ -108,9 +110,9 @@ class EHRdataset(Dataset):
 
 
 def get_datasets(discretizer, normalizer, args):
-    train_ds = EHRdataset(discretizer, normalizer, f'{args.ehr_data_dir}/{args.task}/train_listfile.csv', os.path.join(args.ehr_data_dir, f'{args.task}/train'))
-    val_ds = EHRdataset(discretizer, normalizer, f'{args.ehr_data_dir}/{args.task}/val_listfile.csv', os.path.join(args.ehr_data_dir, f'{args.task}/train'))
-    test_ds = EHRdataset(discretizer, normalizer, f'{args.ehr_data_dir}/{args.task}/test_listfile.csv', os.path.join(args.ehr_data_dir, f'{args.task}/test'))
+    train_ds = EHRdataset(discretizer, normalizer, f'{shamout_dir}/{args.ehr_data_dir}/{args.task}/train_listfile.csv', os.path.join(args.ehr_data_dir, f'{args.task}/train'))
+    val_ds = EHRdataset(discretizer, normalizer, f'{shamout_dir}/{args.ehr_data_dir}/{args.task}/val_listfile.csv', os.path.join(args.ehr_data_dir, f'{args.task}/train'))
+    test_ds = EHRdataset(discretizer, normalizer, f'{shamout_dir}/{args.ehr_data_dir}/{args.task}/test_listfile.csv', os.path.join(args.ehr_data_dir, f'{args.task}/test'))
     return train_ds, val_ds, test_ds
 
 def get_data_loader(discretizer, normalizer, dataset_dir, batch_size):
