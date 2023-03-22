@@ -1,6 +1,8 @@
 import argparse
 
 def args_parser():
+    shamout_dir = '/scratch/fs999/shamoutlab'
+
     parser = argparse.ArgumentParser(description='arguments')
 
     parser.add_argument('--layer_after', default=4, type=int, help='apply mmtm module after fourth layer -1 indicates mmtm after every layer')
@@ -61,9 +63,9 @@ def args_parser():
                                 'use one of the provided ones.')
 
     parser.add_argument('--ehr_data_dir', type=str, help='Path to the data of phenotyping fusion_type',
-                        default='data/mimic-iv-extracted')
+                        default=f'{shamout_dir}/data/mimic-iv-extracted')
     parser.add_argument('--cxr_data_dir', type=str, help='Path to the data of phenotyping fusion_type',
-                        default='data/physionet.org/files/mimic-cxr-jpg/2.0.0')
+                        default=f'{shamout_dir}/data/physionet.org/files/mimic-cxr-jpg/2.0.0')
     parser.add_argument('--save_dir', type=str, help='Directory relative which all output files are stored',
                     default='checkpoints')
 
