@@ -15,7 +15,10 @@ class CXRModels(nn.Module):
         super(CXRModels, self).__init__()
         self.args = args
         self.device = device
-        self.vision_backbone = getattr(torchvision.models, self.args.vision_backbone)(pretrained=self.args.pretrained)
+        self.weights = None
+        if self.args.pretrained:
+            self.weights = 'IMAGENET1K_V2'
+        self.vision_backbone = getattr(torchvision.models, self.args.vision_backbone)(weights=self.weights)
         classifiers = [ 'classifier', 'fc']
         for classifier in classifiers:
             cls_layer = getattr(self.vision_backbone, classifier, None)
