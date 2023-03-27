@@ -81,7 +81,8 @@ if args.fusion_type == 'mmtm':
         test_dl=test_dl
         )
 elif args.fusion_type == 'daft':
-        trainer = DAFTTrainer(train_dl, 
+        trainer = DAFTTrainer(
+        train_dl, 
         val_dl, 
         args,
         test_dl=test_dl)
