@@ -32,11 +32,14 @@ def args_parser():
                         help='number of hidden units')
     parser.add_argument('--depth', type=int, default=1,
                         help='number of bi-LSTMs')
-    parser.add_argument('--epochs', type=int, default=100,
+    parser.add_argument('--epochs', type=int, default=100, 
                         help='number of chunks to train')
-    parser.add_argument('--load_state', type=str, default=None, help='state dir path')
-    parser.add_argument('--load_state_cxr', type=str, default=None, help='state dir path')
-    parser.add_argument('--load_state_ehr', type=str, default=None, help='state dir path')
+    parser.add_argument('--load_state', type=str, default=None, 
+                        help='state dir path')
+    parser.add_argument('--load_state_cxr', type=str, default=None, 
+                        help='state dir path')
+    parser.add_argument('--load_state_ehr', type=str, default=None, 
+                        shelp='state dir path')
     parser.add_argument('--mode', type=str, default="train",
                         help='mode: train or test')
     parser.add_argument('--batch_size', type=int, default=64)
