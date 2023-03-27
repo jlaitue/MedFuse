@@ -19,7 +19,9 @@ class CXRModels(nn.Module):
         if self.args.pretrained:
             self.weights = 'IMAGENET1K_V1'
         self.vision_backbone = getattr(torchvision.models, self.args.vision_backbone)(weights=self.weights)
+        
         classifiers = [ 'classifier', 'fc']
+        
         for classifier in classifiers:
             cls_layer = getattr(self.vision_backbone, classifier, None)
             if cls_layer is None:
