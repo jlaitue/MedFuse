@@ -89,6 +89,7 @@ class Trainer():
     def freeze(self, model):
         for p in model.parameters():
            p.requires_grad = False
+           
     def plot_array(self, array, disc='loss'):
         plt.plot(array)
         plt.ylabel(disc)

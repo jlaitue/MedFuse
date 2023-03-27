@@ -226,6 +226,7 @@ class FusionTrainer(Trainer):
         self.print_and_write(best_stats , isbest=True, prefix='late fusion weighted average')
 
         return best_stats 
+    
     def eval_age(self):
 
         print('validating ... ')
@@ -257,6 +258,7 @@ class FusionTrainer(Trainer):
             # print(f"{start}-{i + 10} & {len(indexes)} & & & {ret['auroc_mean']:0.3f} & {ret['auprc_mean']:0.3f}")
             # self.print_and_write(ret , isbest=True, prefix=f'{self.args.fusion_type} age_{start}_{i + 10}_{len(indexes)}', filename='results_test.txt')
             start = i + step
+
     def test(self):
         print('validating ... ')
         self.epoch = 0
@@ -279,6 +281,7 @@ class FusionTrainer(Trainer):
         ret = self.validate(self.test_dl)
         self.print_and_write(ret , isbest=True, prefix=f'{self.args.fusion_type} test', filename='results_test.txt')
         return
+    
     def train(self):
         print(f'running for fusion_type {self.args.fusion_type}')
         for self.epoch in range(self.start_epoch, self.args.epochs):
@@ -301,6 +304,8 @@ class FusionTrainer(Trainer):
             self.train_epoch()
             self.plot_stats(key='loss', filename='loss.pdf')
             self.plot_stats(key='auroc', filename='auroc.pdf')
+            
+            # Early stopping
             if self.patience >= self.args.patience:
                 break
         self.print_and_write(self.best_stats , isbest=True)
