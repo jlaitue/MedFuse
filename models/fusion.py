@@ -16,13 +16,10 @@ class Fusion(nn.Module):
         self.ehr_model = ehr_model
         self.cxr_model = cxr_model
 
-
         target_classes = self.args.num_classes
         lstm_in = self.ehr_model.feats_dim
         lstm_out = self.cxr_model.feats_dim
         projection_in = self.cxr_model.feats_dim
-
-        
 
         if self.args.labels_set == 'radiology':
             target_classes = self.args.vision_num_classes
@@ -40,11 +37,7 @@ class Fusion(nn.Module):
         )
 
         self.align_loss = CosineLoss()
-        self.kl_loss = KLDivLoss()
-
-
-
-        
+        self.kl_loss = KLDivLoss()       
 
         self.lstm_fused_cls =  nn.Sequential(
             nn.Linear(lstm_out, target_classes),
@@ -55,14 +48,6 @@ class Fusion(nn.Module):
             lstm_in, lstm_out,
             batch_first=True,
             dropout = 0.0)
-
-            
-    def forward_uni_cxr(self, x, seq_lengths=None, img=None ):
-        cxr_preds, _ , feats = self.cxr_model(img)
-        return {
-            'uni_cxr': cxr_preds,
-            'cxr_feats': feats
-            }
     # 
     def forward(self, x, seq_lengths=None, img=None, pairs=None ):
         if self.args.fusion_type == 'uni_cxr':
@@ -77,6 +62,13 @@ class Fusion(nn.Module):
         elif self.args.fusion_type == 'uni_ehr_lstm':
             return self.forward_lstm_ehr(x, seq_lengths=seq_lengths, img=img, pairs=pairs )
 
+    def forward_uni_cxr(self, x, seq_lengths=None, img=None ):
+        cxr_preds, _ , feats = self.cxr_model(img)
+        return {
+            'uni_cxr': cxr_preds,
+            'cxr_feats': feats
+            }
+    
     def forward_uni_ehr(self, x, seq_lengths=None, img=None ):
         ehr_preds , feats = self.ehr_model(x, seq_lengths)
         return {
