@@ -13,8 +13,6 @@ from models.ehr_models import LSTM
 from models.cxr_models import CXRModels
 from .trainer import Trainer
 import pandas as pd
-
-
 import numpy as np
 from sklearn import metrics
 
@@ -23,7 +21,8 @@ class FusionTrainer(Trainer):
         train_dl, 
         val_dl, 
         args,
-        test_dl=None
+        neptune,
+        test_dl=None,
         ):
 
         super(FusionTrainer, self).__init__(args)
@@ -31,6 +30,7 @@ class FusionTrainer(Trainer):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         self.args = args
+        self.neptune_run = neptune
         self.train_dl = train_dl
         self.val_dl = val_dl
         self.test_dl = test_dl
@@ -55,7 +55,7 @@ class FusionTrainer(Trainer):
         self.best_stats = None
         # self.scheduler = optim.lr_scheduler.ExponentialLR(self.optimizer, 0.99) 
         self.epochs_stats = {'loss train': [], 'loss val': [], 'auroc val': [], 'loss align train': [], 'loss align val': []}
-    
+        
     def init_fusion_method(self):
 
         '''
@@ -72,7 +72,7 @@ class FusionTrainer(Trainer):
         if self.args.load_state is not None:
             self.load_state()
 
-
+        # self.freeze is a method from parent class Trainer
         if 'uni_ehr' in self.args.fusion_type:
             self.freeze(self.model.cxr_model)
         elif 'uni_cxr' in self.args.fusion_type:
@@ -115,6 +115,7 @@ class FusionTrainer(Trainer):
             self.optimizer.step()
             outPRED = torch.cat((outPRED, pred), 0)
             outGT = torch.cat((outGT, y), 0)
+            self.neptune_run["batch loss train"].append(loss)
 
             if i % 100 == 9:
                 eta = self.get_eta(self.epoch, i)
@@ -122,6 +123,12 @@ class FusionTrainer(Trainer):
         ret = self.computeAUROC(outGT.data.cpu().numpy(), outPRED.data.cpu().numpy(), 'train')
         self.epochs_stats['loss train'].append(epoch_loss/i)
         self.epochs_stats['loss align train'].append(epoch_loss_align/i)
+        
+        #Neptune logger
+        self.neptune_run["loss train"].append(epoch_loss/i)
+        self.neptune_run["loss align train"].append(epoch_loss_align/i)
+        self.neptune_run["AUROC train"].append(ret['auroc_mean'])
+        self.neptune_run["AUPRC train"].append(ret['auprc_mean'])
         return ret
     
     def validate(self, dl):
@@ -130,7 +137,7 @@ class FusionTrainer(Trainer):
         epoch_loss_align = 0
         # ehr_features = torch.FloatTensor()
         # cxr_features = torch.FloatTensor()
-        outGT = torch.FloatTensor().to(self.device)
+        # outGT = torch.FloatTensor().to(self.device)
         outGT = torch.FloatTensor().to(self.device)
         outPRED = torch.FloatTensor().to(self.device)
 
@@ -180,7 +187,12 @@ class FusionTrainer(Trainer):
         self.epochs_stats['loss align val'].append(epoch_loss_align/i)
         # print(f'true {outGT.data.cpu().numpy().sum()}/{outGT.data.cpu().numpy().shape}')
         # print(f'true {outGT.data.cpu().numpy().sum()/outGT.data.cpu().numpy().shape[0]} ({outGT.data.cpu().numpy().sum()}/{outGT.data.cpu().numpy().shape[0]})')
-
+        
+        # Neptune logger
+        self.neptune_run["loss val"].append(epoch_loss/i)
+        self.neptune_run["loss align val"].append(epoch_loss_align/i)
+        self.neptune_run["AUROC val"].append(ret['auroc_mean'])
+        self.neptune_run["AUPRC val"].append(ret['auprc_mean'])
         return ret
 
     def compute_late_fusion(self, y_true, uniout_cxr, uniout_ehr):
@@ -270,11 +282,11 @@ class FusionTrainer(Trainer):
         self.print_and_write(ret , isbest=True, prefix=f'{self.args.fusion_type} test', filename='results_test.txt')
         return
 
-    def eval(self):
+    def evaluate(self):
         # self.eval_age()
         print('validating ... ')
         self.epoch = 0
-        self.model.eval()
+        self.model.eval() # inference mode
         # ret = self.validate(self.val_dl)
         # self.print_and_write(ret , isbest=True, prefix=f'{self.args.fusion_type} val', filename='results_val.txt')
         # self.model.eval()
