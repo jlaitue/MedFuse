@@ -18,11 +18,19 @@ from pathlib import Path
 import torch
 
 from arguments import args_parser
+import neptune
+
+neptune_run = neptune.init_run(
+    project="jlaitue/CXR-baseline",
+    api_token="eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiIyYTMzMGE1Yi04MjU1LTRkMGEtOWIxZS0yYWEwOTZkMDUwMzAifQ==",
+)
 
 parser = args_parser()
 # add more arguments here ...
 args = parser.parse_args()
 print(args)
+
+neptune_run["arguments"] = args
 
 if args.missing_token is not None:
     from trainers.fusion_tokens_trainer import FusionTokensTrainer as FusionTrainer
@@ -91,12 +99,15 @@ else:
         train_dl, 
         val_dl, 
         args,
+        neptune=neptune_run,
         test_dl=test_dl
         )
 if args.mode == 'train':
     print("==> training")
     trainer.train()
 elif args.mode == 'eval':
-    trainer.eval()
+    trainer.evaluate()
 else:
     raise ValueError("not Implementation for args.mode")
+
+neptune_run.stop()
