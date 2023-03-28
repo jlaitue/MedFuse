@@ -57,8 +57,7 @@ class Trainer():
         if self.args.load_state is None:
             return
         checkpoint = torch.load(self.args.load_state)
-
-
+        
         own_state = self.model.state_dict()
 
         for name, param in checkpoint['state_dict'].items():
@@ -129,15 +128,13 @@ class Trainer():
         auc_scores = np.array(auc_scores)
         auprc_scores = np.array(auprc_scores)
        
-        return { "auc_scores": auc_scores,
-            
-            "auroc_mean": np.mean(auc_scores),
-            "auprc_mean": np.mean(auprc_scores),
-            "auprc_scores": auprc_scores, 
-            'ci_auroc': ci_auroc,
-            'ci_auprc': ci_auprc,
-            }
-
+        return {"auc_scores": auc_scores,
+                "auroc_mean": np.mean(auc_scores),
+                "auprc_mean": np.mean(auprc_scores),
+                "auprc_scores": auprc_scores, 
+                'ci_auroc': ci_auroc,
+                'ci_auprc': ci_auprc,
+                }
 
     def step_lr(self, epoch):
         step = self.steps[0]
@@ -172,6 +169,7 @@ class Trainer():
         eta = f"{d.day-1} Days {d.hour}:{d.minute}:{d.second}"
 
         return eta
+    
     def get_gt(self, y_ehr, y_cxr):
         if 'radiology' in self.args.labels_set :
             return y_cxr
@@ -201,6 +199,7 @@ class Trainer():
         plt.legend()
         plt.savefig(f"{self.args.save_dir}/{filename}")
         plt.close()
+
     def print_and_write(self, ret, prefix='val', isbest=False, filename='results.txt'):
 
         with open(f"{self.args.save_dir}/{filename}", 'a') as results_file:
