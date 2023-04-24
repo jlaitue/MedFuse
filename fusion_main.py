@@ -21,10 +21,10 @@ import torch.utils.data as data
 from arguments import args_parser
 import neptune
 
-neptune_run = neptune.init_run(
-    project="jlaitue/CXR-baseline",
-    api_token="eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiIyYTMzMGE1Yi04MjU1LTRkMGEtOWIxZS0yYWEwOTZkMDUwMzAifQ==",
-)
+# neptune_run = neptune.init_run(
+#     project="jlaitue/CXR-baseline",
+#     api_token="eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiIyYTMzMGE1Yi04MjU1LTRkMGEtOWIxZS0yYWEwOTZkMDUwMzAifQ==",
+# )
 
 parser = args_parser()
 # add more arguments here ...
@@ -103,7 +103,7 @@ else:
         train_dl, 
         val_dl, 
         args,
-        neptune=neptune_run,
+        # neptune=neptune_run,
         test_dl=test_dl
         )
 if args.mode == 'train':
@@ -114,4 +114,4 @@ elif args.mode == 'eval':
 else:
     raise ValueError("not Implementation for args.mode")
 
-neptune_run.stop()
+# neptune_run.stop()

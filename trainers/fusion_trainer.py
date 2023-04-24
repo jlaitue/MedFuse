@@ -21,7 +21,7 @@ class FusionTrainer(Trainer):
         train_dl, 
         val_dl, 
         args,
-        neptune,
+        # neptune,
         test_dl=None,
         ):
 
@@ -30,7 +30,7 @@ class FusionTrainer(Trainer):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         self.args = args
-        self.neptune_run = neptune
+        # self.neptune_run = neptune
         self.train_dl = train_dl
         self.val_dl = val_dl
         self.test_dl = test_dl
@@ -116,7 +116,7 @@ class FusionTrainer(Trainer):
             # They concat the pred at each epoch, why??
             outPRED = torch.cat((outPRED, pred), 0)
             outGT = torch.cat((outGT, y), 0)
-            self.neptune_run["batch loss train"].append(loss)
+            # self.neptune_run["batch loss train"].append(loss)
 
             if i % 100 == 9:
                 eta = self.get_eta(self.epoch, i)
@@ -126,10 +126,10 @@ class FusionTrainer(Trainer):
         self.epochs_stats['loss align train'].append(epoch_loss_align/i)
         
         #Neptune logger
-        self.neptune_run["loss train"].append(epoch_loss/i)
-        self.neptune_run["loss align train"].append(epoch_loss_align/i)
-        self.neptune_run["AUROC train"].append(ret['auroc_mean'])
-        self.neptune_run["AUPRC train"].append(ret['auprc_mean'])
+        # self.neptune_run["loss train"].append(epoch_loss/i)
+        # self.neptune_run["loss align train"].append(epoch_loss_align/i)
+        # self.neptune_run["AUROC train"].append(ret['auroc_mean'])
+        # self.neptune_run["AUPRC train"].append(ret['auprc_mean'])
         return ret
     
     def validate(self, dl):
@@ -189,11 +189,11 @@ class FusionTrainer(Trainer):
         # print(f'true {outGT.data.cpu().numpy().sum()}/{outGT.data.cpu().numpy().shape}')
         # print(f'true {outGT.data.cpu().numpy().sum()/outGT.data.cpu().numpy().shape[0]} ({outGT.data.cpu().numpy().sum()}/{outGT.data.cpu().numpy().shape[0]})')
         
-        # Neptune logger
-        self.neptune_run["loss val"].append(epoch_loss/i)
-        self.neptune_run["loss align val"].append(epoch_loss_align/i)
-        self.neptune_run["AUROC val"].append(ret['auroc_mean'])
-        self.neptune_run["AUPRC val"].append(ret['auprc_mean'])
+        # # Neptune logger
+        # self.neptune_run["loss val"].append(epoch_loss/i)
+        # self.neptune_run["loss align val"].append(epoch_loss_align/i)
+        # self.neptune_run["AUROC val"].append(ret['auroc_mean'])
+        # self.neptune_run["AUPRC val"].append(ret['auprc_mean'])
         return ret
 
     def compute_late_fusion(self, y_true, uniout_cxr, uniout_ehr):
