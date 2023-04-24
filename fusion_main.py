@@ -31,7 +31,7 @@ parser = args_parser()
 args = parser.parse_args()
 print(args)
 
-neptune_run["arguments"] = args
+# neptune_run["arguments"] = args
 
 if args.missing_token is not None:
     from trainers.fusion_tokens_trainer import FusionTokensTrainer as FusionTrainer
