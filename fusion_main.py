@@ -79,7 +79,7 @@ train_dl, val_dl, test_dl = load_cxr_ehr(args, ehr_train_ds, ehr_val_ds, cxr_tra
 
 indices = torch.arange(22)
 # cxr_train_ds = data.Subset(cxr_train_ds, indices)
-cxr_val_ds = data.Subset(cxr_val_ds, indices)
+val_dl = data.Subset(val_dl, indices)
 
 with open(f"{args.save_dir}/args.txt", 'w') as results_file:
     for arg in vars(args): 

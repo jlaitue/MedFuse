@@ -99,10 +99,12 @@ class Trainer():
         y_true = np.array(y_true)
         predictions = np.array(predictions)
         
-        print(f"AUROC y_true: {y_true.shape} {y_true}")
-        print(f"AUROC positives: {(y_true == 1).sum(axis=-1)}")
-        
-        print(f"AUROC predictions: {predictions.shape} {predictions}")
+        print(f"AUROC y_true: {y_true.shape}")
+        print(y_true)
+        print(f"AUROC positives: {(y_true == 1).sum(axis=-1).shape}")
+        print((y_true == 1).sum(axis=-1))
+        print(f"AUROC predictions: {predictions.shape}")
+        print(predictions)
         input("Press any key to continue.")
 
         auc_scores = metrics.roc_auc_score(y_true, predictions, average=None)
