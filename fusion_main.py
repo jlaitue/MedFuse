@@ -16,6 +16,7 @@ from datasets.cxr_dataset import get_cxr_datasets
 from datasets.fusion import load_cxr_ehr
 from pathlib import Path
 import torch
+import torch.utils.data as data
 
 from arguments import args_parser
 import neptune
@@ -73,6 +74,9 @@ normalizer.load_params(normalizer_state)
 ehr_train_ds, ehr_val_ds, ehr_test_ds = get_datasets(discretizer, normalizer, args)
 
 cxr_train_ds, cxr_val_ds, cxr_test_ds = get_cxr_datasets(args)
+
+indices = torch.arange(1000)
+cxr_train_ds = data.Subset(cxr_train_ds, indices)
 
 train_dl, val_dl, test_dl = load_cxr_ehr(args, ehr_train_ds, ehr_val_ds, cxr_train_ds, cxr_val_ds, ehr_test_ds, cxr_test_ds)
 

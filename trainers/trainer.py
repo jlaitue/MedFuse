@@ -98,7 +98,11 @@ class Trainer():
     def computeAUROC(self, y_true, predictions, verbose=1):
         y_true = np.array(y_true)
         predictions = np.array(predictions)
-
+        
+        print(f"AUROC y_true: {y_true}")
+        print(f"AUROC predictions: {predictions}")
+        input("Press any key to continue.")
+        
         auc_scores = metrics.roc_auc_score(y_true, predictions, average=None)
         ave_auc_micro = metrics.roc_auc_score(y_true, predictions,
                                             average="micro")

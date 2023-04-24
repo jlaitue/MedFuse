@@ -102,7 +102,7 @@ class FusionTrainer(Trainer):
             img = img.to(self.device)
 
             output = self.model(x, seq_lengths, img, pairs)
-            
+            # This probably takes out the index for the modality we want the preds from
             pred = output[self.args.fusion_type].squeeze()
             loss = self.loss(pred, y)
             epoch_loss += loss.item()
@@ -113,6 +113,7 @@ class FusionTrainer(Trainer):
             self.optimizer.zero_grad()
             loss.backward()
             self.optimizer.step()
+            # They concat the pred at each epoch, why??
             outPRED = torch.cat((outPRED, pred), 0)
             outGT = torch.cat((outGT, y), 0)
             self.neptune_run["batch loss train"].append(loss)
