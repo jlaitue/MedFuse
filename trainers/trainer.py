@@ -98,7 +98,10 @@ class Trainer():
     def computeAUROC(self, y_true, predictions, verbose=1):
         y_true = np.array(y_true)
         predictions = np.array(predictions)
-        
+
+        y_true = y_true[:23, :]
+        predictions = predictions[:23, :]
+
         print(f"AUROC y_true: {y_true.shape}")
         print(y_true)
         print(f"AUROC positives: {(y_true == 1).sum(axis=-1).shape}")
