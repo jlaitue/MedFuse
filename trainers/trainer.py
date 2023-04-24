@@ -100,6 +100,8 @@ class Trainer():
         predictions = np.array(predictions)
         
         print(f"AUROC y_true: {y_true.shape} {y_true}")
+        print(f"AUROC positives: {(y_true == 1).sum(axis=-1)}")
+        
         print(f"AUROC predictions: {predictions.shape} {predictions}")
         input("Press any key to continue.")
 
