@@ -75,10 +75,10 @@ ehr_train_ds, ehr_val_ds, ehr_test_ds = get_datasets(discretizer, normalizer, ar
 
 cxr_train_ds, cxr_val_ds, cxr_test_ds = get_cxr_datasets(args)
 
+train_dl, val_dl, test_dl = load_cxr_ehr(args, ehr_train_ds, ehr_val_ds, cxr_train_ds, cxr_val_ds, ehr_test_ds, cxr_test_ds)
+
 indices = torch.arange(1000)
 cxr_train_ds = data.Subset(cxr_train_ds, indices)
-
-train_dl, val_dl, test_dl = load_cxr_ehr(args, ehr_train_ds, ehr_val_ds, cxr_train_ds, cxr_val_ds, ehr_test_ds, cxr_test_ds)
 
 with open(f"{args.save_dir}/args.txt", 'w') as results_file:
     for arg in vars(args): 
