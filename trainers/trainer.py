@@ -99,8 +99,8 @@ class Trainer():
         y_true = np.array(y_true)
         predictions = np.array(predictions)
 
-        y_true = y_true[:23, :]
-        predictions = predictions[:23, :]
+        # y_true = y_true[:23, :]
+        # predictions = predictions[:23, :]
 
         print(f"AUROC y_true: {y_true.shape}")
         print(y_true)
