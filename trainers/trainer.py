@@ -108,9 +108,13 @@ class Trainer():
         print((y_true == 1).sum(axis=-1))
         print(f"AUROC predictions: {predictions.shape}")
         print(predictions)
-        input("Press any key to continue.")
+        
 
         auc_scores = metrics.roc_auc_score(y_true, predictions, average=None)
+        
+        print("AUC scores: ", auc_scores.shape)
+        print(auc_scores)
+        input("Press any key to continue.")
         ave_auc_micro = metrics.roc_auc_score(y_true, predictions,
                                             average="micro")
         ave_auc_macro = metrics.roc_auc_score(y_true, predictions,
